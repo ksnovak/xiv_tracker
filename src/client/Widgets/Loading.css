@@ -1,0 +1,37 @@
+#loadingIndicator {
+  /* Display this on top of the Directory */
+  position: absolute;
+  top: 1em;
+  z-index: 1;
+
+  /* Allow the loading text to appear next to the indicator */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/**/
+#loadingIndicator.show {
+  transition-property: opacity, visibility;
+  transition-duration: 0ms;
+  transition-delay: 500ms;
+  opacity: 1;
+  visibility: visible;
+}
+
+#loadingIndicator.hide {
+  transition-property: opacity, visibility;
+  transition-duration: 1000ms;
+  transition-delay: 500ms;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#loadingIndicator .sk-spinner {
+  color: var(--green);
+}
+
+#loadingIndicator span {
+  margin-left: 10px;
+  color: var(--dark);
+}
