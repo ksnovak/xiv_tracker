@@ -3,7 +3,7 @@
 import express from 'express';
 import os from 'os';
 import chalk from 'chalk';
-import character from './character';
+import lodestone from './lodestone';
 import utils from '../../utils';
 import Errors from '../Models/Errors';
 
@@ -20,7 +20,7 @@ router.use((req, res, next) => {
   next();
 });
 
-router.use(/\/api\/character(s)?/i, character.router);
+router.use(/\/api\/lodestone/i, lodestone.router);
 
 // Routes for api specifically
 router.get('/api/', (req, res) => {
