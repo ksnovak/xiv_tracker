@@ -18,7 +18,8 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      estinien: false
+      server: null,
+      name: null
     };
   }
 
@@ -26,14 +27,15 @@ export default class App extends Component {
   handleSubmit = event => {
     //Grab the important details from the state
     const details = {
-      estinien: this.state.estinien
+      server: this.state.server,
+      name: this.state.name
     };
 
     // Call the API to get the new data
     this.getStreams(details);
 
     // Update the querystring. Sorting just so that the less-spammy params get listed first
-    const order = ['estinien'];
+    const order = ['server', 'name'];
     const newParams =
       '?' +
       queryString.stringify(details, {
@@ -56,7 +58,8 @@ export default class App extends Component {
     //Set the state based on querystring values as appropriate
     this.setState(
       {
-        estinien: qs.estinien !== 'false'
+        server: qs.server,
+        name: qs.name
       },
       () => {
         //After the state values are set, make our initial query.
@@ -66,11 +69,11 @@ export default class App extends Component {
   }
 
   render() {
-    const { estinien } = this.state;
+    const { server, name } = this.state;
 
     return (
       <div id="home" className="row py-1">
-        Hello world, Estinien values currently {estinien ? 'true' : 'false'}
+        Hello world, looking for '{name}' @ {server}.
       </div>
     );
   }
