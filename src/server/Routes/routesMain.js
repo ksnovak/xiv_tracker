@@ -4,6 +4,8 @@ import express from 'express';
 import os from 'os';
 import chalk from 'chalk';
 import lodestone from './lodestone';
+import ariyala from './ariyala';
+import fflogs from './fflogs';
 import utils from '../../utils';
 import Errors from '../Models/Errors';
 
@@ -21,6 +23,8 @@ router.use((req, res, next) => {
 });
 
 router.use(/\/api\/lodestone/i, lodestone.router);
+router.use(/\/api\/ariyala/i, ariyala.router);
+router.use(/\/api\/fflogs/i, fflogs.router);
 
 // Routes for api specifically
 router.get('/api/', (req, res) => {
