@@ -2,6 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import RoutesUtils from './routeUtils';
 import utils from '../../utils';
+import FflogsCharacter from '../Models/FflogsCharacter';
 
 require('dotenv').config();
 
@@ -19,23 +20,24 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/test', async (req, res, next) => {
-  res.send(await fflogsLookup('report/fights/RxLkPmNQdz6HanpB?translate=false', next));
+  res.send(await fflogsRequest('report/fights/RxLkPmNQdz6HanpB?translate=false', next));
 });
 
 router.get('/character', async (req, res, next) => {
   res.send(await getFflogsCharacter(req.query));
 });
 
+router.get('/batch', async (req, res, next) => {
+  res.send(await getFflogsBatch(req.query));
+});
+
 // Core fflogs call to be made by any of the routes
-async function fflogsLookup(url, params, next) {
+async function fflogsRequest(url, params, next) {
   return fflogsBaseRequest({
     method: 'get',
     url
   })
-    .then((res) => {
-      console.log('im in here');
-      return res.data;
-    })
+    .then(res => res.data)
     .catch(
       err =>
         // console.log(err);
@@ -49,7 +51,12 @@ async function getFflogsCharacter(params, next) {
     return [];
   }
 
-  return fflogsLookup(`rankings/character/${name}/${server}/${region || 'na'}`);
+  const results = await fflogsRequest(`rankings/character/${name}/${server}/${region || 'na'}`);
+  return new FflogsCharacter(results);
+}
+
+async function getFflogsBatch(params, next) {
+  return 'you done looked up this batch!';
 }
 
 module.exports = {
