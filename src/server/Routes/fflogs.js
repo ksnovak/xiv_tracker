@@ -38,11 +38,11 @@ async function fflogsRequest(url, params, next) {
     url
   })
     .then(res => res.data)
-    .catch(
-      err =>
-        // console.log(err);
-        `Errrorrrrr ${err}`
-    );
+    .catch((err) => {
+      // For now, any errored request will just return an empty object.
+      console.log(`BaseReq err: ${err}`);
+      return {};
+    });
 }
 
 async function getFflogsCharacter(params, next) {

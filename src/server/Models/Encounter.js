@@ -1,3 +1,6 @@
+/**
+ * An Encounter is defined as a specific raidboss or instance, which may have multiple parses (i.e. one for each class)
+ */
 module.exports = class Encounter {
   constructor({ encounterID, encounterName }) {
     this.encounterID = encounterID;
