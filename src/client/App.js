@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './app.css';
+import BatchLookup from './Widgets/BatchLookup';
 import queryString from 'query-string';
 import axios from 'axios';
 
@@ -72,8 +73,10 @@ export default class App extends Component {
     const { server, name } = this.state;
 
     return (
-      <div id="home" className="row py-1">
-        Hello world, looking for '{name}' @ {server}.
+      <div id="home">
+        Welcome to my internet
+        <br />
+        <BatchLookup />
       </div>
     );
   }
