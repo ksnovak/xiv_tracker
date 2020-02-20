@@ -4,6 +4,6 @@ export default class SubmitButton extends Component {
   componentDidMount() {}
 
   render() {
-    return <button type="button">Search</button>;
+    return <button type="submit">Search</button>;
   }
 }

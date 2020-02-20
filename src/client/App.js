@@ -26,26 +26,27 @@ export default class App extends Component {
 
   // Submitting the form: Get the new data, and update the querystring
   handleSubmit = event => {
-    //Grab the important details from the state
-    const details = {
-      server: this.state.server,
-      name: this.state.name
-    };
+    // //Grab the important details from the state
+    // const details = {
+    //   region: this.state.region,
+    //   names: this.state.names
+    // };
 
-    // Call the API to get the new data
-    this.getStreams(details);
+    // // Call the API to get the new data
+    // this.getStreams(details);
 
-    // Update the querystring. Sorting just so that the less-spammy params get listed first
-    const order = ['server', 'name'];
-    const newParams =
-      '?' +
-      queryString.stringify(details, {
-        sort: (left, right) => order.indexOf(left) >= order.indexOf(right)
-      });
+    // // Update the querystring. Sorting just so that the less-spammy params get listed first
+    // const order = ['region', 'names'];
+    // const newParams =
+    //   '?' +
+    //   queryString.stringify(details, {
+    //     sort: (left, right) => order.indexOf(left) >= order.indexOf(right)
+    //   });
 
-    this.pushNewState(newParams);
+    // this.pushNewState(newParams);
 
-    if (event) event.preventDefault();
+    // if (event) event.preventDefault();
+    alert('I done submitted!!!');
   };
 
   pushNewState(newUrl) {
@@ -55,7 +56,6 @@ export default class App extends Component {
 
   componentDidMount() {
     const qs = queryString.parse(window.location.search);
-
     //Set the state based on querystring values as appropriate
     this.setState(
       {
@@ -76,7 +76,7 @@ export default class App extends Component {
       <div id="home">
         Welcome to my internet
         <br />
-        <BatchLookup />
+        <BatchLookup handleSubmit={this.handleSubmit} />
       </div>
     );
   }

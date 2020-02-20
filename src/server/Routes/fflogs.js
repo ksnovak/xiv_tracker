@@ -56,6 +56,7 @@ router.get('/', async (req, res) => {
   res.send('fflogs home');
 });
 
+// Look up an individual character, given their Name, Server, and Region
 router.get('/character', async (req, res) => {
   const { name, server, region } = req.query;
   if (!name || !server) {

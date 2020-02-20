@@ -6,7 +6,7 @@ export default class ServerSelect extends Component {
   }
 
   render() {
-    const { id } = this.props;
+    const { id, server } = this.props;
     const serverList = [
       'Balmung',
       'Brynhildr',
@@ -18,10 +18,17 @@ export default class ServerSelect extends Component {
       'Zalera'
     ];
 
-    const options = serverList.map(server => <option value={server}>{server}</option>);
+    const options = serverList.map(serverOption => (
+      <option value={serverOption} key={serverOption}>
+        {serverOption}
+      </option>
+    ));
     return (
       <label htmlFor={id}>
-        Server: <select id={id}>{options}</select>
+        Server:{' '}
+        <select id={id} defaultValue={server}>
+          {options}
+        </select>
       </label>
     );
   }

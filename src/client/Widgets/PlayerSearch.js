@@ -7,15 +7,20 @@ export default class PlayerSearch extends Component {
   componentDidMount() {}
 
   render() {
-    const { playerNum } = this.props;
+    const { playerNum, name, server } = this.props;
     return (
       <div>
         <label htmlFor={`characterName${playerNum}`}>
           Character:&nbsp;
-          <input id={`characterName${playerNum}`} type="text" placeholder="Yoshi P" />
+          <input
+            id={`characterName${playerNum}`}
+            type="text"
+            placeholder="Yoshi P"
+            defaultValue={name}
+          />
         </label>
 
-        <ServerSelect id={`server${playerNum}`} />
+        <ServerSelect id={`server${playerNum}`} server={server} />
       </div>
     );
   }

@@ -8,7 +8,16 @@ export default class BatchLookup extends Component {
     super(props);
 
     this.state = {
-      estinien: false
+      names: [
+        { name: 'Warrior Of-light', server: 'Coeurl' },
+        { name: 'Thancred Waters', server: 'Coeurl' },
+        { name: 'Urianger Augurelt', server: 'Coeurl' },
+        { name: 'Y\'shtola Rhul', server: 'Coeurl' },
+        { name: 'Alisaie Leveilleur', server: 'Zalera' },
+        { name: 'Alphinaud Leveilleur', server: 'Mateus' },
+        { name: 'Tataru Taru', server: 'Mateus' },
+        { name: 'Minfilia Warde', server: 'Mateus' }
+      ]
     };
   }
 
@@ -17,17 +26,22 @@ export default class BatchLookup extends Component {
   }
 
   render() {
+    const { names } = this.state;
+
+    const { handleSubmit } = this.props;
     const searchFields = [];
     for (let i = 0; i < 8; i++) {
-      searchFields.push(<PlayerSearch playerNum={i} />);
+      searchFields.push(
+        <PlayerSearch key={i} playerNum={i} name={names[i].name} server={names[i].server} />
+      );
     }
 
     return (
-      <div>
+      <form onSubmit={handleSubmit}>
         {searchFields}
         <br />
         <SubmitButton />
-      </div>
+      </form>
     );
   }
 }
