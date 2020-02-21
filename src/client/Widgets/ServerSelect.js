@@ -6,7 +6,7 @@ export default class ServerSelect extends Component {
   }
 
   render() {
-    const { id, server } = this.props;
+    const { playerNum, id, server, handleServerChange } = this.props;
     const serverList = [
       'Balmung',
       'Brynhildr',
@@ -24,9 +24,9 @@ export default class ServerSelect extends Component {
       </option>
     ));
     return (
-      <label htmlFor={id}>
+      <label htmlFor={id} onChange={handleServerChange}>
         Server:{' '}
-        <select id={id} defaultValue={server}>
+        <select id={id} name="server" defaultValue={server} playernum={playerNum}>
           {options}
         </select>
       </label>

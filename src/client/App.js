@@ -19,9 +19,33 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      server: null,
-      name: null
+      // names: new Array(8)
+      names: [
+        { name: 'Warrior Of-light', server: 'Coeurl' },
+        { name: 'Thancred Waters', server: 'Coeurl' },
+        { name: 'Urianger Augurelt', server: 'Coeurl' },
+        { name: "Y'shtola Rhul", server: 'Coeurl' },
+        { name: 'Alisaie Leveilleur', server: 'Zalera' },
+        { name: 'Alphinaud Leveilleur', server: 'Mateus' },
+        { name: 'Tataru Taru', server: 'Mateus' },
+        { name: 'Minfilia Warde', server: 'Mateus' }
+      ]
     };
+
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+  }
+
+  handleSearchChange(event) {
+    const { name, value } = event.target;
+    const playerNum = event.target.getAttribute('playernum');
+
+    console.log(`ummm ${playerNum}`);
+
+    const existingValues = this.state.names;
+
+    existingValues[playerNum][name] = value;
+
+    this.setState({ names: existingValues });
   }
 
   // Submitting the form: Get the new data, and update the querystring
@@ -46,7 +70,10 @@ export default class App extends Component {
     // this.pushNewState(newParams);
 
     // if (event) event.preventDefault();
-    alert('I done submitted!!!');
+    console.log('Going to submit with:');
+    console.log(this.state.names);
+
+    event.preventDefault();
   };
 
   pushNewState(newUrl) {
@@ -70,13 +97,15 @@ export default class App extends Component {
   }
 
   render() {
-    const { server, name } = this.state;
-
     return (
       <div id="home">
         Welcome to my internet
         <br />
-        <BatchLookup handleSubmit={this.handleSubmit} />
+        <BatchLookup
+          handleSearchChange={this.handleSearchChange}
+          handleSubmit={this.handleSubmit}
+          names={this.state.names}
+        />
       </div>
     );
   }
