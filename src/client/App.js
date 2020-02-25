@@ -36,25 +36,39 @@ export default class App extends Component {
   }
 
   handleSearchChange(event) {
+    // Figure out which field was updated, for which player, and what its new value is
     const { name, value } = event.target;
     const playerNum = event.target.getAttribute('playernum');
 
-    console.log(`ummm ${playerNum}`);
-
+    // Grab the existing player list, and update the specific player
     const existingValues = this.state.names;
-
     existingValues[playerNum][name] = value;
 
+    // Push the updated player list to the state
     this.setState({ names: existingValues });
+  }
+
+  performBatchLookup(names) {
+    //Turn name and server into Name@Server for simplified handling
+    const lookupParams = '?name=' + names.map(name => `${name.name}@${name.server}`).join('&name=');
+    console.log(lookupParams);
+
+    axios
+      .get(`/api/fflogs/batch${lookupParams}`)
+      .then(results => {
+        console.log('Neato~ response was');
+        console.log(results);
+      })
+      .catch(err => {
+        console.log(`o we fucked uop`);
+        console.log(err);
+      });
   }
 
   // Submitting the form: Get the new data, and update the querystring
   handleSubmit = event => {
     // //Grab the important details from the state
-    // const details = {
-    //   region: this.state.region,
-    //   names: this.state.names
-    // };
+    const { names } = this.state;
 
     // // Call the API to get the new data
     // this.getStreams(details);
@@ -68,12 +82,9 @@ export default class App extends Component {
     //   });
 
     // this.pushNewState(newParams);
+    this.performBatchLookup(names);
 
-    // if (event) event.preventDefault();
-    console.log('Going to submit with:');
-    console.log(this.state.names);
-
-    event.preventDefault();
+    if (event) event.preventDefault();
   };
 
   pushNewState(newUrl) {
