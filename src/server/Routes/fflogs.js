@@ -31,7 +31,7 @@ async function makeRequest(url, params) {
 
 // Look up a specified character
 async function characterLookup(name, server, region) {
-  const char = await makeRequest(`rankings/character/${name}/${server}/${region}`);
+  const char = await makeRequest(`rankings/character/${name}/${server}/${region}?zone=29`);
   return new FflogsCharacter(char);
 }
 
@@ -63,7 +63,7 @@ router.get('/character', async (req, res) => {
     return [];
   }
 
-  res.send(characterLookup(name, server, region || 'na'));
+  res.send(await characterLookup(name, server, region || 'na'));
 });
 
 // Look up a batch of names (e.g. a whole party), formatted as "Firstname Lastname@Server"
