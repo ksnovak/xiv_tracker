@@ -48,16 +48,28 @@ export default class App extends Component {
     this.setState({ names: existingValues });
   }
 
-  performBatchLookup(names) {
+  // Take the names and servers and turn them into a querystring to submit
+  createQueryString(names) {
+    let lookupParams = '?';
+
+    names.forEach(char => {
+      //Only add someone if there is both a name and a server, otherwise just pass over them
+      if (char.name && char.server) {
+        lookupParams += `name[]=${char.name}@${char.server}&`;
+      }
+    });
+
+    return lookupParams;
+  }
+
+  performBatchLookup(queryString) {
     //Turn name and server into Name@Server for simplified handling
-    const lookupParams = '?name=' + names.map(name => `${name.name}@${name.server}`).join('&name=');
-    console.log(lookupParams);
 
     axios
-      .get(`/api/fflogs/batch${lookupParams}`)
+      .get(`/api/fflogs/batch${queryString}`)
       .then(results => {
         console.log('Neato~ response was');
-        console.log(results);
+        console.log(results.data);
       })
       .catch(err => {
         console.log(`o we fucked uop`);
@@ -68,25 +80,16 @@ export default class App extends Component {
   // Submitting the form: Get the new data, and update the querystring
   handleSubmit = event => {
     // //Grab the important details from the state
-    const { names } = this.state;
+    const queryString = this.createQueryString(this.state.names);
 
-    // // Call the API to get the new data
-    // this.getStreams(details);
+    this.performBatchLookup(queryString);
 
-    // // Update the querystring. Sorting just so that the less-spammy params get listed first
-    // const order = ['region', 'names'];
-    // const newParams =
-    //   '?' +
-    //   queryString.stringify(details, {
-    //     sort: (left, right) => order.indexOf(left) >= order.indexOf(right)
-    //   });
-
-    // this.pushNewState(newParams);
-    this.performBatchLookup(names);
+    this.pushNewState(queryString);
 
     if (event) event.preventDefault();
   };
 
+  // Update the URL to make a bookmark-able page to visit
   pushNewState(newUrl) {
     if (history.pushState) window.history.pushState({ path: newUrl }, '', newUrl);
     else window.location.href = newUrl;
