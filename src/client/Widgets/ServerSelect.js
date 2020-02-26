@@ -26,7 +26,7 @@ export default class ServerSelect extends Component {
     return (
       <label htmlFor={id} onChange={handleServerChange}>
         Server:{' '}
-        <select id={id} name="server" defaultValue={server} playernum={playerNum}>
+        <select id={id} name="server" value={server} playernum={playerNum}>
           {options}
         </select>
       </label>

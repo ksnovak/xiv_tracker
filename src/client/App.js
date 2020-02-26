@@ -19,17 +19,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // names: new Array(8)
-      names: [
-        { name: 'Warrior Of-light', server: 'Coeurl' },
-        { name: 'Thancred Waters', server: 'Coeurl' },
-        { name: 'Urianger Augurelt', server: 'Coeurl' },
-        { name: "Y'shtola Rhul", server: 'Coeurl' },
-        { name: 'Alisaie Leveilleur', server: 'Zalera' },
-        { name: 'Alphinaud Leveilleur', server: 'Mateus' },
-        { name: 'Tataru Taru', server: 'Mateus' },
-        { name: 'Minfilia Warde', server: 'Mateus' }
-      ]
+      names: new Array(8)
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -42,6 +32,12 @@ export default class App extends Component {
 
     // Grab the existing player list, and update the specific player
     const existingValues = this.state.names;
+
+    //If there isn't an object yet for this index, create an empty one
+    if (playerNum > existingValues.length) {
+      existingValues[playerNum] = {};
+    }
+
     existingValues[playerNum][name] = value;
 
     // Push the updated player list to the state
@@ -59,7 +55,16 @@ export default class App extends Component {
       }
     });
 
-    return lookupParams;
+    //Remove trailing ampersand
+    return lookupParams.slice(0, lookupParams.length - 1);
+  }
+
+  //Take a querystring set of names and turn them into objects
+  parseQueryString(querystring) {
+    return querystring.map(value => {
+      const [name, server] = value.split('@');
+      return { name, server };
+    });
   }
 
   performBatchLookup(queryString) {
@@ -96,18 +101,14 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    //Grab the Name@Server list from querystring, turn it into an array of objects
     const qs = queryString.parse(window.location.search);
+    const names = this.parseQueryString(qs['name[]']);
+
     //Set the state based on querystring values as appropriate
-    this.setState(
-      {
-        server: qs.server,
-        name: qs.name
-      },
-      () => {
-        //After the state values are set, make our initial query.
-        console.log('fetch stuff, dawg');
-      }
-    );
+    this.setState({
+      names: names
+    });
   }
 
   render() {
