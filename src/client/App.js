@@ -30,9 +30,12 @@ export default class App extends Component {
   handleSearchChange(event) {
     // Figure out which field was updated, for which player, and what its new value is
     let { name, value } = event.target;
+
+    //Minor override needed; having the character name field be named "name" causes questionable autocomplete
     if (name === 'playerName') {
       name = 'name';
     }
+
     const playerNum = event.target.getAttribute('playernum');
 
     // Grab the existing player list, and update the specific player
