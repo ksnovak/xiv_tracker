@@ -61,6 +61,18 @@ export default class App extends Component {
 
   //Take a querystring set of names and turn them into objects
   parseQueryString(querystring) {
+    //No querystring passed, return early
+    if (!querystring) {
+      return [];
+    }
+
+    //A single name specified, needs to individually be parsed and returned wrapped in an array
+    if (typeof querystring == 'string') {
+      const [name, server] = querystring.split('@');
+      return [{ name, server }];
+    }
+
+    //Multiple names passed, parse them and return them all
     return querystring.map(value => {
       const [name, server] = value.split('@');
       return { name, server };
@@ -68,8 +80,6 @@ export default class App extends Component {
   }
 
   performBatchLookup(queryString) {
-    //Turn name and server into Name@Server for simplified handling
-
     axios
       .get(`/api/fflogs/batch${queryString}`)
       .then(results => {

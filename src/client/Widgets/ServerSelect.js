@@ -19,14 +19,19 @@ export default class ServerSelect extends Component {
     ];
 
     const options = serverList.map(serverOption => (
-      <option value={serverOption} key={serverOption}>
+      <option value={serverOption.toLowerCase()} key={serverOption}>
         {serverOption}
       </option>
     ));
     return (
       <label htmlFor={id} onChange={handleServerChange}>
         Server:{' '}
-        <select id={id} name="server" value={server} playernum={playerNum}>
+        <select
+          id={id}
+          name="server"
+          value={server ? server.toLowerCase() : undefined}
+          playernum={playerNum}
+        >
           {options}
         </select>
       </label>
