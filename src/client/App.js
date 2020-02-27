@@ -34,7 +34,7 @@ export default class App extends Component {
     const existingValues = this.state.names;
 
     //If there isn't an object yet for this index, create an empty one
-    if (playerNum > existingValues.length) {
+    if (playerNum >= existingValues.length) {
       existingValues[playerNum] = {};
     }
 
