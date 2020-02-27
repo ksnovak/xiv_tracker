@@ -10,9 +10,8 @@ export default class ResultsTable extends Component {
       return parses[desiredClass];
     }
 
-    // Otherwise we have to go through each parse object and find the highest
-    const arrayOfParses = Object.entries(parses);
-    const bestParse = arrayOfParses.reduce((highest, current) => (highest[1] > current[1] ? highest : current));
+    // Go through all of a player's parses for the fight, compare, and return the highest class & value
+    const bestParse = Object.entries(parses).reduce((highest, current) => (highest[1] > current[1] ? highest : current));
 
     return `${bestParse[1]} ${bestParse[0]}`;
   }

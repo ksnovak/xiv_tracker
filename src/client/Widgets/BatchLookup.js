@@ -27,7 +27,7 @@ export default class BatchLookup extends Component {
     }
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         {searchFields}
         <br />
         <SubmitButton />

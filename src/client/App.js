@@ -29,7 +29,10 @@ export default class App extends Component {
 
   handleSearchChange(event) {
     // Figure out which field was updated, for which player, and what its new value is
-    const { name, value } = event.target;
+    let { name, value } = event.target;
+    if (name === 'playerName') {
+      name = 'name';
+    }
     const playerNum = event.target.getAttribute('playernum');
 
     // Grab the existing player list, and update the specific player
