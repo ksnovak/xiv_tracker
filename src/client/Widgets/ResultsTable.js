@@ -24,7 +24,11 @@ export default class ResultsTable extends Component {
     // Go through all of a player's parses for the fight, compare, and return the highest class & value
     const bestParse = Object.entries(parses).reduce((highest, current) => (highest[1] > current[1] ? highest : current));
 
-    return `${bestParse[1]} ${bestParse[0]}`;
+    return (
+      <div>
+        {bestParse[1]} <img src={`/public/Jobs/${bestParse[0]}.png`} />
+      </div>
+    );
   }
 
   // Fill in details for an individual player and their parses
