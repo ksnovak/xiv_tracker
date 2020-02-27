@@ -29,14 +29,15 @@ export default class ResultsTable extends Component {
 
   // Fill in details for an individual player and their parses
   buildPlayerRow(player) {
+    // Make sure we actually got a player and a parse before proceeding
     if (player && player.parses) {
       const encounters = player.parses;
 
-      // Because a player might not have a parse for all 4 encounters, we must do a loop for all 4
-      // Mapping might cause a parse to appear in the wrong spot.
+      // Go through all of their encounters, finding their best parse for each
+      // Forloop because a player may have logs for 1&4 but not 2&3, and a map can misrepresent that scenario
       const encounterCells = [];
-      for (let i = 0; i < 4; i++) {
-        encounterCells.push(<td>{this.findBestParse(encounters[i])}</td>);
+      for (let i = 0; i < 4; i += 1) {
+        encounterCells.push(<td key={i}>{this.findBestParse(encounters[i])}</td>);
       }
 
       return (
