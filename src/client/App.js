@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './app.css';
 import BatchLookup from './Widgets/BatchLookup';
+import ResultsTable from './Widgets/ResultsTable';
 import queryString from 'query-string';
 import axios from 'axios';
 
@@ -19,7 +20,8 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      names: new Array(8)
+      names: new Array(8),
+      parses: []
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -83,8 +85,8 @@ export default class App extends Component {
     axios
       .get(`/api/fflogs/batch${queryString}`)
       .then(results => {
-        console.log('Neato~ response was');
         console.log(results.data);
+        this.setState({ parses: results.data });
       })
       .catch(err => {
         console.log(`o we fucked uop`);
@@ -122,6 +124,7 @@ export default class App extends Component {
   }
 
   render() {
+    const { names, parses } = this.state;
     return (
       <div id="home">
         Welcome to my internet
@@ -129,8 +132,9 @@ export default class App extends Component {
         <BatchLookup
           handleSearchChange={this.handleSearchChange}
           handleSubmit={this.handleSubmit}
-          names={this.state.names}
+          names={names}
         />
+        <ResultsTable parses={parses} />
       </div>
     );
   }

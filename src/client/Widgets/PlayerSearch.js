@@ -15,7 +15,7 @@ export default class PlayerSearch extends Component {
           <input
             id={`characterName${playerNum}`}
             playernum={playerNum}
-            name="name"
+            name="playerName"
             type="text"
             placeholder="Yoshi P"
             defaultValue={name}
