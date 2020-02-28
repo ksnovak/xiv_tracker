@@ -124,9 +124,15 @@ export default class App extends Component {
     const names = this.parseQueryString(qs['name[]']);
 
     //Set the state based on querystring values as appropriate
-    this.setState({
-      names: names
-    });
+    this.setState(
+      {
+        names: names
+      },
+      () => {
+        //If there were names passed, then do an immediate lookup
+        if (names.length) this.handleSubmit();
+      }
+    );
   }
 
   render() {
