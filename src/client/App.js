@@ -76,12 +76,29 @@ export default class App extends Component {
     });
   }
 
+  updateNamesWithParses(names, parses) {
+    let parsePointer = 0;
+
+    //Go through the names in state, and add their associated parses
+    for (let i = 0; i < names.length; i++) {
+      //Extra check to make sure this value in state is a truthy one before associating a parse with it
+      if (names[i].name && names[i].name.length) {
+        names[i].parses = parses[parsePointer].parses;
+        parsePointer++;
+      }
+    }
+
+    return names;
+  }
+
   performBatchLookup(queryString) {
     axios
       .get(`/api/fflogs/batch${queryString}`)
       .then(results => {
-        console.log(results.data);
-        this.setState({ parses: results.data });
+        const { names } = this.state;
+        const { data } = results;
+
+        this.setState({ names: this.updateNamesWithParses(names, data) });
       })
       .catch(err => {
         console.log(`o we fucked uop`);
@@ -135,7 +152,7 @@ export default class App extends Component {
           handleSubmit={this.handleSubmit}
           names={names}
         />
-        <ResultsTable parses={parses} />
+        <ResultsTable names={names} />
       </div>
     );
   }
