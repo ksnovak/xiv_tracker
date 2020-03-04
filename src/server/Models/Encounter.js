@@ -35,7 +35,7 @@ module.exports = class Encounter {
         }
 
         // Add the current class to the array of classes, and then add them all to the whole encounter
-        classes[spec] = percentile;
+        classes[spec] = parseInt(percentile, 10);
         encounters[index].classes = classes;
       }
     });
