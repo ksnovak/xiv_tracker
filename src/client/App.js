@@ -5,17 +5,6 @@ import ResultsTable from './Widgets/ResultsTable';
 import queryString from 'query-string';
 import axios from 'axios';
 
-function getArray(value) {
-  if (value == null || value == undefined) {
-    return [];
-  }
-  if (Array.isArray(value)) {
-    return value.sort();
-  }
-
-  return [value];
-}
-
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +47,7 @@ export default class App extends Component {
 
     names.forEach(char => {
       //Only add someone if there is both a name and a server, otherwise just pass over them
-      if (char.name && char.server) {
+      if (char.name && char.name.length && char.server) {
         lookupParams += `name[]=${char.name}@${char.server}&`;
       }
     });
