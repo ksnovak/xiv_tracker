@@ -6,7 +6,7 @@ export default class ServerSelect extends Component {
   }
 
   render() {
-    const { playerNum, id, server, handleServerChange } = this.props;
+    const { playerNum, id, server, handleServerChange, isDisabled } = this.props;
     const serverList = [
       'Balmung',
       'Brynhildr',
@@ -29,6 +29,7 @@ export default class ServerSelect extends Component {
         <select
           id={id}
           name="server"
+          disabled={isDisabled}
           value={server ? server.toLowerCase() : undefined}
           playernum={playerNum}
         >

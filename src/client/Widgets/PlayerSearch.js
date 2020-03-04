@@ -7,7 +7,7 @@ export default class PlayerSearch extends Component {
   componentDidMount() {}
 
   render() {
-    const { playerNum, name, server, handleSearchChange } = this.props;
+    const { playerNum, name, server, handleSearchChange, isDisabled } = this.props;
     return (
       <div>
         <label htmlFor={`characterName${playerNum}`}>
@@ -18,6 +18,7 @@ export default class PlayerSearch extends Component {
             name="playerName"
             type="text"
             placeholder="Yoshi P"
+            disabled={isDisabled}
             defaultValue={name}
             onChange={handleSearchChange}
           />
@@ -26,6 +27,7 @@ export default class PlayerSearch extends Component {
         <ServerSelect
           id={`server${playerNum}`}
           server={server}
+          isDisabled={isDisabled}
           handleServerChange={handleSearchChange}
           playerNum={playerNum}
         />

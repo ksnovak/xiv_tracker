@@ -6,7 +6,7 @@ export default class ResultsTable extends Component {
   buildParseCell(name, parse) {
     return (
       <div>
-        {parse} <img src={`/public/Jobs/${name}.png`} />
+        {parse} <img src={`/public/Jobs/${name}.png`} alt={name} />
       </div>
     );
   }
@@ -62,9 +62,9 @@ export default class ResultsTable extends Component {
   }
 
   render() {
-    const { parses } = this.props;
+    const { names } = this.props;
 
-    if (!parses.length) {
+    if (!names.length) {
       return null;
     }
 
@@ -80,7 +80,7 @@ export default class ResultsTable extends Component {
               <th>Titan</th>
             </tr>
           </thead>
-          <tbody>{parses.map(player => this.buildPlayerRow(player))}</tbody>
+          <tbody>{names.map(player => this.buildPlayerRow(player))}</tbody>
         </table>
       </div>
     );
