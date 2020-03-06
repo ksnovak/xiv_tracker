@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import JobSelect from './JobSelect';
 
 export default class ResultsTable extends Component {
   componentDidMount() {}
@@ -54,8 +55,11 @@ export default class ResultsTable extends Component {
       return (
         <tr key={player.name}>
           <td>{player.name}</td>
-
           {encounterCells}
+
+          <td>
+            <JobSelect />
+          </td>
         </tr>
       );
     }
@@ -78,6 +82,7 @@ export default class ResultsTable extends Component {
               <th>Voidwalker</th>
               <th>Leviathan</th>
               <th>Titan</th>
+              <th>Preferred Job</th>
             </tr>
           </thead>
           <tbody>{names.map(player => this.buildPlayerRow(player))}</tbody>
