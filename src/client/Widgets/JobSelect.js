@@ -36,10 +36,10 @@ function createOptions() {
 }
 
 export default function JobSelect(props) {
-  const [selected, setSelected] = useState('Any');
+  const { selectedJob, selectJob } = props;
 
   return (
-    <select onChange={event => setSelected(event.target.value)}>
+    <select onChange={event => selectJob(event.target.value)} value={selectedJob}>
       <option value="Any" key="any">
         Any
       </option>
