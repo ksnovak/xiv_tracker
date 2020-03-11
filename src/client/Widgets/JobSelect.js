@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const options = [
+export const jobsAndRoles = [
   { role: 'Tank', jobs: ['Paladin', 'Warrior', 'Dark Knight', 'Gunbreaker'] },
   { role: 'Healer', jobs: ['White Mage', 'Scholar', 'Astrologian'] },
   {
@@ -21,7 +21,7 @@ const options = [
 ];
 
 function createOptions() {
-  return options.map(role => (
+  return jobsAndRoles.map(role => (
     <optgroup label={role.role} key={role.role}>
       <option value={role.role} key={role.role}>
         Any {role.role}
