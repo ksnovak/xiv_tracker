@@ -20,20 +20,28 @@ function findBestParse(encounter, desiredJob) {
   if (!encounter) {
     return;
   }
+
+  const roleEnum = {
+    Tank: 0,
+    Healer: 1,
+    DPS: 2
+  };
+
   const parses = encounter.classes;
   const bestParse = Object.entries(parses)
     .filter((parse) => {
+      // If no job is specified, filter nothing out
       if (!desiredJob || desiredJob === 'Any') {
         return true;
       }
+
+      // If an individual job was specified, only return parses that match that job
       if (desiredJob !== 'Tank' && desiredJob !== 'Healer' && desiredJob !== 'DPS') {
         return parse[0] === desiredJob;
       }
 
-      // Specified a role
-      if (desiredJob === 'Tank' && jobsAndRoles[0].jobs.includes(parse[0])) return true;
-      if (desiredJob === 'Healer' && jobsAndRoles[1].jobs.includes(parse[0])) return true;
-      if (desiredJob === 'DPS' && jobsAndRoles[2].jobs.includes(parse[0])) return true;
+      // If a role was specified, look at the list of jobs for that role and return parse that are within it
+      if (jobsAndRoles[roleEnum[desiredJob]].jobs.includes(parse[0])) return true;
 
       return false;
     })
