@@ -8,6 +8,7 @@ export default class PlayerSearch extends Component {
 
   render() {
     const { playerNum, name, server, handleSearchChange, isDisabled } = this.props;
+
     return (
       <div>
         <label htmlFor={`characterName${playerNum}`}>
@@ -19,7 +20,7 @@ export default class PlayerSearch extends Component {
             type="text"
             placeholder="Yoshi P"
             disabled={isDisabled}
-            defaultValue={name}
+            value={name}
             onChange={handleSearchChange}
           />
         </label>

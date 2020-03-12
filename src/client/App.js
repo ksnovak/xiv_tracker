@@ -16,6 +16,15 @@ export default class App extends Component {
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
+  //Properly capitalize names for cleanliness
+  //For each word, force first letter to be Upper, and all subsequent letters to be lower
+  setNameCase(name) {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+
   handleSearchChange(event) {
     // Figure out which field was updated, for which player, and what its new value is
     let { name, value } = event.target;
@@ -35,7 +44,7 @@ export default class App extends Component {
       existingValues[playerNum] = {};
     }
 
-    existingValues[playerNum][name] = value;
+    existingValues[playerNum][name] = this.setNameCase(value);
 
     // Push the updated player list to the state
     this.setState({ names: existingValues });

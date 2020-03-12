@@ -22,7 +22,7 @@ export default function ResultsTable(props) {
         </thead>
         <tbody>
           {names.map(player => (
-            <PlayerResultsRow player={player} />
+            <PlayerResultsRow player={player} key={player.name} />
           ))}
         </tbody>
       </table>
