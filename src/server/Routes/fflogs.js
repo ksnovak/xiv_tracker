@@ -1,27 +1,27 @@
-import express from 'express';
-import axios from 'axios';
-import RoutesUtils from './routeUtils';
-import utils from '../../utils';
-import FflogsCharacter from '../Models/FflogsCharacter';
+import express from "express";
+import axios from "axios";
+import RoutesUtils from "./routeUtils";
+import utils from "../../utils";
+import FflogsCharacter from "../Models/FflogsCharacter";
 
-require('dotenv').config();
+require("dotenv").config();
 
 const router = express.Router();
 
 const baseRequest = axios.create({
-  baseURL: 'https://www.fflogs.com/v1/',
+  baseURL: "https://www.fflogs.com/v1/",
   params: {
-    api_key: process.env.FFLOGS_PUBLIC
-  }
+    api_key: process.env.FFLOGS_PUBLIC,
+  },
 });
 
 // Core fflogs call to be made by any of the routes
 async function makeRequest(url, params) {
   return baseRequest({
-    method: 'get',
-    url
+    method: "get",
+    url,
   })
-    .then(res => res.data)
+    .then((res) => res.data)
     .catch((err) => {
       // For now, any errored request will just return an empty object.
       console.log(`BaseReq err: ${err}`);
@@ -31,7 +31,9 @@ async function makeRequest(url, params) {
 
 // Look up a specified character
 async function characterLookup(name, server, region) {
-  const char = await makeRequest(`rankings/character/${name}/${server}/${region}`);
+  const char = await makeRequest(
+    `rankings/character/${name}/${server}/${region}`
+  );
   return new FflogsCharacter(char);
 }
 
@@ -41,13 +43,13 @@ async function batchRequest(names, region) {
     names
       // Validate the entries, only taking in ones that have both a name and a server
       .filter((lookup) => {
-        console.log('filter');
+        console.log("filter");
         const { name, server } = lookup;
         return !!(name && server);
       })
       // Go through each valid entry, and perform an individual lookup
       .map(async (lookup) => {
-        console.log('map');
+        console.log("map");
         const { name, server } = lookup;
         return characterLookup(name, server, region);
       })
@@ -59,19 +61,19 @@ router.get('/', async (req, res) => {
 });
 
 // Look up an individual character, given their Name, Server, and Region
-router.get('/character', async (req, res) => {
+router.get("/character", async (req, res) => {
   const { name, server, region } = req.query;
   if (!name || !server) {
     return [];
   }
 
-  res.send(await characterLookup(name, server, region || 'na'));
+  res.send(await characterLookup(name, server, region || "na"));
 });
 
 // Look up a batch of names (e.g. a whole party), formatted as "Firstname Lastname@Server"
-router.get('/batch', async (req, res) => {
+router.get("/batch", async (req, res) => {
   const names = req.query.name;
-  const region = req.query.region || 'na';
+  const region = req.query.region || "na";
   // Make sure there's at least some name entered
   if (!names) {
     return [];
@@ -79,7 +81,7 @@ router.get('/batch', async (req, res) => {
 
   // Split the querystring into an array of Names and Servers
   const lookups = names.map((character) => {
-    const [name, server] = character.split('@');
+    const [name, server] = character.split("@");
     return { name, server };
   });
 
@@ -88,5 +90,5 @@ router.get('/batch', async (req, res) => {
 });
 
 module.exports = {
-  router
+  router,
 };
