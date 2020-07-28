@@ -3,6 +3,7 @@ import axios from 'axios';
 import RoutesUtils from './routeUtils';
 import utils from '../../utils';
 import FflogsCharacter from '../Models/FflogsCharacter';
+import Tier from '../Models/Tier';
 
 require('dotenv').config();
 
@@ -35,8 +36,13 @@ async function makeRequest(url, params) {
 // Get base information for zones (i.e. boss names and encounter numbers)
 async function tierLookup(id) {
   const results = await makeRequest('zones');
-  const currentTier = results.filter(tier => tier.id == id);
-  return currentTier;
+  const tierFilter = results.filter(tier => tier.id == id);
+
+  if (tierFilter.length) {
+    return new Tier(tierFilter[0]);
+  }
+
+  return {};
 }
 
 // Look up a specified character
@@ -77,12 +83,10 @@ router.get('/tiers', async (req, res) => {
 
   // If we either have no data at all, or are looking for custom data, then do a lookup.
   if (!currentTierData || tier != currentTier) {
-    console.log('need to lookup');
     placeholderData = await tierLookup(tier);
 
     // If the data retrieved is for the current tier, save it for later
     if (tier == currentTier) {
-      console.log('Ah neat we can stash it');
       currentTierData = placeholderData;
     }
   }
