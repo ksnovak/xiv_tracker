@@ -31,7 +31,7 @@ async function makeRequest(url, params) {
 
 // Look up a specified character
 async function characterLookup(name, server, region) {
-  const char = await makeRequest(`rankings/character/${name}/${server}/${region}?zone=29`);
+  const char = await makeRequest(`rankings/character/${name}/${server}/${region}`);
   return new FflogsCharacter(char);
 }
 
@@ -41,11 +41,13 @@ async function batchRequest(names, region) {
     names
       // Validate the entries, only taking in ones that have both a name and a server
       .filter((lookup) => {
+        console.log('filter');
         const { name, server } = lookup;
         return !!(name && server);
       })
       // Go through each valid entry, and perform an individual lookup
       .map(async (lookup) => {
+        console.log('map');
         const { name, server } = lookup;
         return characterLookup(name, server, region);
       })

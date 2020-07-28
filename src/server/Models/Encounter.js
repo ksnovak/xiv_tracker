@@ -13,8 +13,8 @@ module.exports = class Encounter {
     parses.forEach((parse) => {
       const { difficulty, ilvlKeyOrPatch } = parse;
 
-      // Only look for parses from Savage content, and current patch.
-      if (difficulty === 101 && ilvlKeyOrPatch === 5.1) {
+      // Only look for parses from Savage content
+      if (difficulty === 101) {
         const { encounterID, encounterName, spec, percentile } = parse;
 
         // Define some indexes to compare in the array

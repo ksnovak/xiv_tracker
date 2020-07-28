@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import PlayerResultsRow from './PlayerResultsRow';
+import React, { useState } from "react";
+import PlayerResultsRow from "./PlayerResultsRow";
 
 export default function ResultsTable(props) {
   const { names } = props;
@@ -13,15 +13,15 @@ export default function ResultsTable(props) {
         <thead>
           <tr>
             <th>Player</th>
-            <th>Eden Prime</th>
-            <th>Voidwalker</th>
-            <th>Leviathan</th>
-            <th>Titan</th>
+            <th>Ramuh</th>
+            <th>Raktapaska</th>
+            <th>Idol of Darkness</th>
+            <th>Shiva</th>
             <th>Preferred Job</th>
           </tr>
         </thead>
         <tbody>
-          {names.map(player => (
+          {names.map((player) => (
             <PlayerResultsRow player={player} key={player.name} />
           ))}
         </tbody>
