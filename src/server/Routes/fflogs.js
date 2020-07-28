@@ -1,29 +1,30 @@
-import express from "express";
-import axios from "axios";
-import RoutesUtils from "./routeUtils";
-import utils from "../../utils";
-import FflogsCharacter from "../Models/FflogsCharacter";
+import express from 'express';
+import axios from 'axios';
+import RoutesUtils from './routeUtils';
+import utils from '../../utils';
+import FflogsCharacter from '../Models/FflogsCharacter';
 
-require("dotenv").config();
+require('dotenv').config();
 
 const router = express.Router();
 
 const baseRequest = axios.create({
-  baseURL: "https://www.fflogs.com/v1/",
+  baseURL: 'https://www.fflogs.com/v1/',
   params: {
     api_key: process.env.FFLOGS_PUBLIC,
   },
 });
 
-let tierInfo;
+const currentTier = 33;
+let currentTierData;
 
 // Core fflogs call to be made by any of the routes
 async function makeRequest(url, params) {
   return baseRequest({
-    method: "get",
+    method: 'get',
     url,
   })
-    .then((res) => res.data)
+    .then(res => res.data)
     .catch((err) => {
       // For now, any errored request will just return an empty object.
       console.log(`BaseReq err: ${err}`);
@@ -32,10 +33,10 @@ async function makeRequest(url, params) {
 }
 
 // Get base information for zones (i.e. boss names and encounter numbers)
-async function tierLookup(region) {
-  const results = await makeRequest("zones");
-  const currentTier = results.filter((tier) => tier.id === 33);
-  return currentTier[0];
+async function tierLookup(id) {
+  const results = await makeRequest('zones');
+  const currentTier = results.filter(tier => tier.id == id);
+  return currentTier;
 }
 
 // Look up a specified character
@@ -52,46 +53,58 @@ async function batchRequest(names, region) {
     names
       // Validate the entries, only taking in ones that have both a name and a server
       .filter((lookup) => {
-        console.log("filter");
+        console.log('filter');
         const { name, server } = lookup;
         return !!(name && server);
       })
       // Go through each valid entry, and perform an individual lookup
       .map(async (lookup) => {
-        console.log("map");
+        console.log('map');
         const { name, server } = lookup;
         return characterLookup(name, server, region);
       })
   );
 }
 
-router.get("/", async (req, res) => {
-  res.send("fflogs home");
+router.get('/', async (req, res) => {
+  res.send('fflogs home');
 });
 
-router.get("/tiers", async (req, res) => {
-  if (!tierInfo) {
-    const { region } = req.query;
-    tierInfo = await tierLookup(region || "na");
+router.get('/tiers', async (req, res) => {
+  const { tier = currentTier } = req.query;
+  let placeholderData;
+
+
+  // If we either have no data at all, or are looking for custom data, then do a lookup.
+  if (!currentTierData || tier != currentTier) {
+    console.log('need to lookup');
+    placeholderData = await tierLookup(tier);
+
+    // If the data retrieved is for the current tier, save it for later
+    if (tier == currentTier) {
+      console.log('Ah neat we can stash it');
+      currentTierData = placeholderData;
+    }
   }
 
-  res.send(tierInfo);
+
+  res.send(placeholderData || currentTierData);
 });
 
 // Look up an individual character, given their Name, Server, and Region
-router.get("/character", async (req, res) => {
+router.get('/character', async (req, res) => {
   const { name, server, region } = req.query;
   if (!name || !server) {
     return [];
   }
 
-  res.send(await characterLookup(name, server, region || "na"));
+  res.send(await characterLookup(name, server, region || 'na'));
 });
 
 // Look up a batch of names (e.g. a whole party), formatted as "Firstname Lastname@Server"
-router.get("/batch", async (req, res) => {
+router.get('/batch', async (req, res) => {
   const names = req.query.name;
-  const region = req.query.region || "na";
+  const region = req.query.region || 'na';
   // Make sure there's at least some name entered
   if (!names) {
     return [];
@@ -99,7 +112,7 @@ router.get("/batch", async (req, res) => {
 
   // Split the querystring into an array of Names and Servers
   const lookups = names.map((character) => {
-    const [name, server] = character.split("@");
+    const [name, server] = character.split('@');
     return { name, server };
   });
 
