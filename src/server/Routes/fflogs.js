@@ -15,6 +15,8 @@ const baseRequest = axios.create({
   },
 });
 
+let tierInfo;
+
 // Core fflogs call to be made by any of the routes
 async function makeRequest(url, params) {
   return baseRequest({
@@ -27,6 +29,13 @@ async function makeRequest(url, params) {
       console.log(`BaseReq err: ${err}`);
       return {};
     });
+}
+
+// Get base information for zones (i.e. boss names and encounter numbers)
+async function tierLookup(region) {
+  const results = await makeRequest("zones");
+  const currentTier = results.filter((tier) => tier.id === 33);
+  return currentTier[0];
 }
 
 // Look up a specified character
@@ -56,8 +65,17 @@ async function batchRequest(names, region) {
   );
 }
 
-router.get('/', async (req, res) => {
-  res.send('fflogs home');
+router.get("/", async (req, res) => {
+  res.send("fflogs home");
+});
+
+router.get("/tiers", async (req, res) => {
+  if (!tierInfo) {
+    const { region } = req.query;
+    tierInfo = await tierLookup(region || "na");
+  }
+
+  res.send(tierInfo);
 });
 
 // Look up an individual character, given their Name, Server, and Region
