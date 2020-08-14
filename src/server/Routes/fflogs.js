@@ -16,14 +16,15 @@ const baseRequest = axios.create({
   },
 });
 
-const currentTier = 33;
+const currentTier = 33; // Eden's Verse
 let currentTierData;
 
 // Core fflogs call to be made by any of the routes
-async function makeRequest(url, params) {
+async function makeRequest(url, params = {}) {
   return baseRequest({
     method: 'get',
     url,
+    params
   })
     .then(res => res.data)
     .catch((err) => {
@@ -36,6 +37,7 @@ async function makeRequest(url, params) {
 // Get base information for zones (i.e. boss names and encounter numbers)
 async function tierLookup(id) {
   const results = await makeRequest('zones');
+
   const tierFilter = results.filter(tier => tier.id == id);
 
   if (tierFilter.length) {
@@ -46,15 +48,16 @@ async function tierLookup(id) {
 }
 
 // Look up a specified character
-async function characterLookup(name, server, region) {
+async function characterLookup(name, server, region, partition) {
   const char = await makeRequest(
-    `rankings/character/${name}/${server}/${region}`
+    `rankings/character/${name}/${server}/${region}`,
+    { partition }
   );
   return new FflogsCharacter(char);
 }
 
 // Look up multiple characters at once
-async function batchRequest(names, region) {
+async function batchRequest(names, region, partition) {
   return Promise.all(
     names
       // Validate the entries, only taking in ones that have both a name and a server
@@ -67,7 +70,7 @@ async function batchRequest(names, region) {
       .map(async (lookup) => {
         console.log('map');
         const { name, server } = lookup;
-        return characterLookup(name, server, region);
+        return characterLookup(name, server, region, partition);
       })
   );
 }
@@ -97,18 +100,18 @@ router.get('/tiers', async (req, res) => {
 
 // Look up an individual character, given their Name, Server, and Region
 router.get('/character', async (req, res) => {
-  const { name, server, region } = req.query;
+  const { name, server, region = 'na', partition = 1 } = req.query;
   if (!name || !server) {
     return [];
   }
 
-  res.send(await characterLookup(name, server, region || 'na'));
+  res.send(await characterLookup(name, server, region, partition));
 });
 
 // Look up a batch of names (e.g. a whole party), formatted as "Firstname Lastname@Server"
 router.get('/batch', async (req, res) => {
-  const names = req.query.name;
-  const region = req.query.region || 'na';
+  const { name: names, region = 'na', partition = 1 } = req.query;
+
   // Make sure there's at least some name entered
   if (!names) {
     return [];
@@ -121,7 +124,7 @@ router.get('/batch', async (req, res) => {
   });
 
   // Perform the batch lookup
-  res.send(await batchRequest(lookups, region));
+  res.send(await batchRequest(lookups, region, partition));
 });
 
 module.exports = {
