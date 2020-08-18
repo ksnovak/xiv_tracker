@@ -111,7 +111,7 @@ export default class App extends Component {
         this.setState({ names: this.updateNamesWithParses(names, data) });
       })
       .catch(err => {
-        console.log(`o we fucked uop`);
+        console.log(`Batch lookup error`);
         console.log(err);
       });
   }
