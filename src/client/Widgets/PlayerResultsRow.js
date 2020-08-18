@@ -15,9 +15,11 @@ function buildParseCell(parse) {
 
 // For a given encounter, find a player's best parse; optionally pass in a class to override and just find that class.
 // eslint-disable-next-line class-methods-use-this
-function findBestParse(encounter, desiredJob) {
+function findBestParse(data, desiredJob) {
   // If no parse for this fight exists, return early
-  if (!encounter) {
+
+
+  if (!data) {
     return;
   }
 
@@ -27,7 +29,7 @@ function findBestParse(encounter, desiredJob) {
     DPS: 2
   };
 
-  const parses = encounter.classes;
+  const parses = data.classes;
   const bestParse = Object.entries(parses)
     .filter((parse) => {
       // If no job is specified, filter nothing out
@@ -51,19 +53,20 @@ function findBestParse(encounter, desiredJob) {
 }
 
 export default function PlayerResultsRow(props) {
-  const { player } = props;
+  const { player, encounters } = props;
   const [selectedJob, selectJob] = useState('Any');
+
 
   if (!player || !player.parses) {
     return null;
   }
 
-  // Go through all of their encounters, finding their best parse for each
-  // Forloop because a player may have logs for 1&4 but not 2&3, and a map can misrepresent that scenario
-  const encounterCells = [];
-  for (let i = 0; i < 4; i++) {
-    encounterCells.push(<td key={i}>{findBestParse(player.parses[i], selectedJob)}</td>);
-  }
+  // Go through each encounter, and find the player's best parse
+  // Keeping in mind any job/role restrictions
+  const encounterCells = encounters.map((encounter) => {
+    const parse = player.parses[encounter.name];
+    return <td key={encounter.id}>{findBestParse(parse, selectedJob)}</td>;
+  });
 
   return (
     <tr key={player.name}>

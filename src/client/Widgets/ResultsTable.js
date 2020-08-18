@@ -1,28 +1,33 @@
-import React, { useState } from "react";
-import PlayerResultsRow from "./PlayerResultsRow";
+import React, { useState } from 'react';
+import PlayerResultsRow from './PlayerResultsRow';
+
+function getTierHeaders(tier) {
+  if (tier && tier.encounters) {
+    const { encounters } = tier;
+    return (
+      <thead>
+        <tr>
+          <th>Player name</th>
+          {encounters.map(encounter => <th>{encounter.name}</th>)}
+        </tr>
+      </thead>
+    );
+  }
+}
 
 export default function ResultsTable(props) {
-  const { names } = props;
+  const { names, tier } = props;
 
-  if (!names.length) {
+  if (!names.length || tier.length) {
     return null;
   }
   return (
     <div>
       <table>
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Ramuh</th>
-            <th>Raktapaska</th>
-            <th>Idol of Darkness</th>
-            <th>Shiva</th>
-            <th>Preferred Job</th>
-          </tr>
-        </thead>
+        {getTierHeaders(tier)}
         <tbody>
-          {names.map((player) => (
-            <PlayerResultsRow player={player} key={player.name} />
+          {names.map(player => (
+            <PlayerResultsRow player={player} encounters={tier.encounters} key={player.name} />
           ))}
         </tbody>
       </table>
