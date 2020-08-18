@@ -8,6 +8,7 @@ function getTierHeaders(tier) {
       <thead>
         <tr>
           <th>Player name</th>
+          <th>Job</th>
           {encounters.map(encounter => <th>{encounter.name}</th>)}
         </tr>
       </thead>
@@ -23,7 +24,7 @@ export default function ResultsTable(props) {
   }
   return (
     <div>
-      <table>
+      <table id="resultsTable" className="table">
         {getTierHeaders(tier)}
         <tbody>
           {names.map(player => (
