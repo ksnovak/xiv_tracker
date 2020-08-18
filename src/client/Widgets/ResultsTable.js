@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PlayerResultsRow from './PlayerResultsRow';
+import './ResultsTable.css';
 
 function getTierHeaders(tier) {
   if (tier && tier.encounters) {
@@ -23,8 +24,8 @@ export default function ResultsTable(props) {
     return null;
   }
   return (
-    <div>
-      <table id="resultsTable" className="table">
+    <div id="resultsContainer">
+      <table id="resultsTable" className="table table-sm">
         {getTierHeaders(tier)}
         <tbody>
           {names.map(player => (
