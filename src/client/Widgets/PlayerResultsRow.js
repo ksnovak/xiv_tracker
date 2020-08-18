@@ -23,30 +23,27 @@ function findBestParse(data, desiredJob) {
     return;
   }
 
-  const roleEnum = {
-    Tank: 0,
-    Healer: 1,
-    DPS: 2
-  };
+  const bestParse = Object.entries(data.classes)
 
-  const parses = data.classes;
-  const bestParse = Object.entries(parses)
-    .filter((parse) => {
-      // If no job is specified, filter nothing out
-      if (!desiredJob || desiredJob === 'Any') {
+    // Filter down to find any jobs which are eligible to be used (i.e. correct role)
+    .filter(([job, percentile]) => {
+      // If nothing is selected, OR a job is selected and we are on that current job, the check is very easy
+      if (!desiredJob || desiredJob === 'Any' || desiredJob === job) {
         return true;
       }
 
-      // If an individual job was specified, only return parses that match that job
-      if (desiredJob !== 'Tank' && desiredJob !== 'Healer' && desiredJob !== 'DPS') {
-        return parse[0] === desiredJob;
+
+      // If a ROLE was specified, then we need to figure out which jobs match within that role
+      const roleDetails = jobsAndRoles.filter(role => role.role === desiredJob);
+      if (roleDetails.length && roleDetails[0].jobs.includes(job)) {
+        return true;
       }
 
-      // If a role was specified, look at the list of jobs for that role and return parse that are within it
-      if (jobsAndRoles[roleEnum[desiredJob]].jobs.includes(parse[0])) return true;
-
+      // If the specification didn't match any checks, then it's not a job we need.
       return false;
     })
+
+    // Go through the list of eligible jobs and compare their respective parses
     .reduce((highest, current) => (highest[1] > current[1] ? highest : current), 0);
 
   return buildParseCell(bestParse);
@@ -71,11 +68,11 @@ export default function PlayerResultsRow(props) {
   return (
     <tr key={player.name}>
       <td>{player.name}</td>
-      {encounterCells}
-
       <td>
         <JobSelect selectedJob={selectedJob} selectJob={selectJob} />
       </td>
+      {encounterCells}
+
     </tr>
   );
 }
