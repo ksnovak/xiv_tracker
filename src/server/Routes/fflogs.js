@@ -29,7 +29,7 @@ async function makeRequest(url, params = {}) {
     .then(res => res.data)
     .catch((err) => {
       // For now, any errored request will just return an empty object.
-      console.log(`BaseReq err: ${err}`);
+      console.log(`BaseReq err: ${err}; for request (${url})`);
       return {};
     });
 }
@@ -53,6 +53,7 @@ async function characterLookup(name, server, region, partition) {
     `rankings/character/${name}/${server}/${region}`,
     { partition }
   );
+
   return new FflogsCharacter(char);
 }
 

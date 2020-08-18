@@ -5,10 +5,11 @@ module.exports = class Encounter {
   constructor({ encounterID, encounterName }) {
     this.encounterID = encounterID;
     this.encounterName = encounterName;
+    this.classes = {};
   }
 
   static newEncountersFromData(parses) {
-    const encounters = [];
+    const encounters = {};
 
     parses.forEach((parse) => {
       const { difficulty, ilvlKeyOrPatch } = parse;
@@ -17,29 +18,15 @@ module.exports = class Encounter {
       if (difficulty === 101) {
         const { encounterID, encounterName, spec, percentile } = parse;
 
-        // Define some indexes to compare in the array
-        let index = encounters.length;
-        const prev = index - 1;
-
-        let classes = {};
-
-        // If this is the first log for this boss, set base data
-        if (index === 0 || (encounters[prev] && encounters[prev].encounterID !== encounterID)) {
-          encounters[index] = new Encounter({ encounterID, encounterName });
+        // If this is the first parse for this specific encounter, define the encounter
+        if (!encounters[encounterName]) {
+          encounters[encounterName] = new Encounter({ encounterID, encounterName });
         }
 
-        // If the boss already exists, we need to grab the existing parses for it, as well as modify the pointer
-        else {
-          index = prev;
-          classes = encounters[index].classes;
-        }
-
-        // Add the current class to the array of classes, and then add them all to the whole encounter
-        classes[spec] = parseInt(percentile, 10);
-        encounters[index].classes = classes;
+        // Add the job's parse to the encounter as a whole number
+        encounters[encounterName].classes[spec] = parseInt(percentile, 10);
       }
     });
-
     return encounters;
   }
 };
