@@ -10,7 +10,8 @@ export default class App extends Component {
     super(props);
     this.state = {
       names: new Array(8),
-      parses: []
+      parses: [],
+      tier: []
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -115,6 +116,17 @@ export default class App extends Component {
       });
   }
 
+
+  // Get the names of the fights and their respective IDs
+  getTierInfo() {
+    console.log('Calling getTierInfo!')
+    axios
+      .get(`/api/fflogs/tiers`)
+      .then(results => {
+        this.setState({ tier: results ? results.data : null })
+      })
+  }
+
   // Submitting the form: Get the new data, and update the querystring
   handleSubmit = event => {
     // //Grab the important details from the state
@@ -138,6 +150,9 @@ export default class App extends Component {
     const qs = queryString.parse(window.location.search);
     const names = this.parseQueryString(qs['name[]']);
 
+
+    this.getTierInfo();
+
     //Set the state based on querystring values as appropriate
     this.setState(
       {
@@ -151,7 +166,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { names, parses } = this.state;
+    const { names, parses, tier } = this.state;
     return (
       <div id="home">
         Welcome to my internet
@@ -161,7 +176,7 @@ export default class App extends Component {
           handleSubmit={this.handleSubmit}
           names={names}
         />
-        <ResultsTable names={names} />
+        <ResultsTable names={names} tier={tier} />
       </div>
     );
   }
