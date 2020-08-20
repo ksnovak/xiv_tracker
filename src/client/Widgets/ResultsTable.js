@@ -18,7 +18,7 @@ function getTierHeaders(tier) {
 }
 
 export default function ResultsTable(props) {
-  const { names, tier } = props;
+  const { names, tier, handleSelectChange } = props;
 
   if (!names.length || tier.length) {
     return null;
@@ -28,8 +28,8 @@ export default function ResultsTable(props) {
       <table id="resultsTable" className="table table-sm">
         {getTierHeaders(tier)}
         <tbody>
-          {names.map(player => (
-            <PlayerResultsRow player={player} encounters={tier.encounters} key={player.name} />
+          {names.map((player, index) => (
+            <PlayerResultsRow player={player} encounters={tier.encounters} key={index} handleSelectChange={handleSelectChange} index={index} />
           ))}
         </tbody>
       </table>

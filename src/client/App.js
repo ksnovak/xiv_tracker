@@ -11,10 +11,12 @@ export default class App extends Component {
     this.state = {
       names: new Array(8),
       parses: [],
-      tier: []
+      tier: [],
+      selected: undefined
     };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   //Properly capitalize names for cleanliness
@@ -49,6 +51,12 @@ export default class App extends Component {
 
     // Push the updated player list to the state
     this.setState({ names: existingValues });
+  }
+
+  handleSelectChange(event) {
+
+    this.setState({ selected: parseInt(event.target.value, 10) })
+
   }
 
   // Take the names and servers and turn them into a querystring to submit
@@ -176,7 +184,8 @@ export default class App extends Component {
           handleSubmit={this.handleSubmit}
           names={names}
         />
-        <ResultsTable names={names} tier={tier} />
+        <ResultsTable names={names} tier={tier} handleSelectChange={this.handleSelectChange} />
+
       </div>
     );
   }

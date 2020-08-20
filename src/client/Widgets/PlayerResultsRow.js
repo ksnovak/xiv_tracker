@@ -50,7 +50,7 @@ function findBestParse(data, desiredJob) {
 }
 
 export default function PlayerResultsRow(props) {
-  const { player, encounters } = props;
+  const { player, encounters, index, handleSelectChange } = props;
   const [selectedJob, selectJob] = useState('Any');
 
 
@@ -72,6 +72,9 @@ export default function PlayerResultsRow(props) {
         <JobSelect selectedJob={selectedJob} selectJob={selectJob} />
       </td>
       {encounterCells}
+      <td>
+        <button type="button" onClick={handleSelectChange} value={index}>Expand!</button>
+      </td>
 
     </tr>
   );
