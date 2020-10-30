@@ -4,7 +4,7 @@ import ServerSelect from './ServerSelect';
 // import './PlayerSearch.css';
 
 export default class PlayerSearch extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     const { playerNum, name, server, handleSearchChange, isDisabled } = this.props;
@@ -20,7 +20,7 @@ export default class PlayerSearch extends Component {
             type="text"
             placeholder="Yoshi P"
             disabled={isDisabled}
-            value={name}
+            value={name || ''}
             onChange={handleSearchChange}
           />
         </label>
