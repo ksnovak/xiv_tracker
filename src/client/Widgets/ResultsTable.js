@@ -10,7 +10,7 @@ function getTierHeaders(tier) {
         <tr>
           <th>Player name</th>
           <th>Job</th>
-          {encounters.map(encounter => <th>{encounter.name}</th>)}
+          {encounters.map(encounter => <th key={encounter.id}>{encounter.name}</th>)}
         </tr>
       </thead>
     );
