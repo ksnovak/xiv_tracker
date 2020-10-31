@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './app.css';
 import BatchLookup from './Widgets/BatchLookup';
 import ResultsTable from './Widgets/ResultsTable';
+import IndividualTable from './Widgets/IndividualTable';
 import queryString from 'query-string';
 import axios from 'axios';
 
@@ -53,10 +54,9 @@ export default class App extends Component {
     this.setState({ names: existingValues });
   }
 
+  //User clicks on "Expand" for an individual player
   handleSelectChange(event) {
-
     this.setState({ selected: parseInt(event.target.value, 10) })
-
   }
 
   // Take the names and servers and turn them into a querystring to submit
@@ -174,7 +174,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { names, parses, tier } = this.state;
+    const { names, parses, tier, selected } = this.state;
     return (
       <div id="home">
         Welcome to my internet
@@ -185,6 +185,8 @@ export default class App extends Component {
           names={names}
         />
         <ResultsTable names={names} tier={tier} handleSelectChange={this.handleSelectChange} />
+
+        {(typeof selected !== "undefined" && names.length) ? <IndividualTable player={names[selected]} tier={tier} /> : ''}
 
       </div>
     );
