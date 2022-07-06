@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './PlayerResultsRow.css';
 import JobSelect, { jobsAndRoles } from './JobSelect';
 
 function buildParseCell(parse) {
@@ -6,7 +7,7 @@ function buildParseCell(parse) {
     const [job, percentile] = parse;
     return (
       <div>
-        {percentile} <img src={`/public/Jobs/${job}.png`} alt={job} />
+        {percentile} <img className='jobIcon' src={`/public/Jobs/${job}.png`} alt={job} />
       </div>
     );
   }

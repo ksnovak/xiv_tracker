@@ -16,7 +16,7 @@ const baseRequest = axios.create({
   },
 });
 
-const currentTier = 33; // Eden's Verse
+const currentTier = 44; // Asphodelos
 let currentTierData;
 
 // Core fflogs call to be made by any of the routes
@@ -81,7 +81,6 @@ router.get('/', async (req, res) => {
 router.get('/tiers', async (req, res) => {
   const { tier = currentTier } = req.query;
   let placeholderData;
-
 
   // If we either have no data at all, or are looking for custom data, then do a lookup.
   if (!currentTierData || tier != currentTier) {
