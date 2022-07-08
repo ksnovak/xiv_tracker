@@ -16,7 +16,8 @@ const baseRequest = axios.create({
   },
 });
 
-const currentTier = 44; // Asphodelos
+const currentTier = 44; // 38=Promise, 44=Asphodelos
+const currentPartition = null; //Upon patch release, partitioning occurs. Null = current patch ONLY. Number = specific previous partition
 let currentTierData;
 
 // Core fflogs call to be made by any of the routes
@@ -98,7 +99,7 @@ router.get('/tiers', async (req, res) => {
 
 // Look up an individual character, given their Name, Server, and Region
 router.get('/character', async (req, res) => {
-  const { name, server, region = 'na', partition = 1 } = req.query;
+  const { name, server, region = 'na', partition = currentPartition } = req.query;
   if (!name || !server) {
     return [];
   }
@@ -108,7 +109,7 @@ router.get('/character', async (req, res) => {
 
 // Look up a batch of names (e.g. a whole party), formatted as "Firstname Lastname@Server"
 router.get('/batch', async (req, res) => {
-  const { name: names, region = 'na', partition = 1 } = req.query;
+  const { name: names, region = 'na', partition = currentPartition } = req.query;
 
   // Make sure there's at least some name entered
   if (!names) {

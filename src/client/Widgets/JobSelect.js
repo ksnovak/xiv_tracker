@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export const jobsAndRoles = [
   { role: 'Tank', jobs: ['Paladin', 'Warrior', 'Dark Knight', 'Gunbreaker'] },
-  { role: 'Healer', jobs: ['White Mage', 'Scholar', 'Astrologian'] },
+  { role: 'Healer', jobs: ['White Mage', 'Scholar', 'Astrologian', 'Sage'] },
   {
     role: 'DPS',
     jobs: [
@@ -10,6 +10,7 @@ export const jobsAndRoles = [
       'Monk',
       'Ninja',
       'Samurai',
+      'Reaper',
       'Bard',
       'Machinist',
       'Dancer',
