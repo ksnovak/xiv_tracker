@@ -16,8 +16,15 @@ const baseRequest = axios.create({
   },
 });
 
+const v2Request = axios.create({
+  url: 'https://www.fflogs.com/api/v2/client/',
+  headers: { Authorization: `Bearer ${process.env.FFLOGS_BEARER_TOKEN}`}
+})
+
+
 const currentTier = 44; // 38=Promise, 44=Asphodelos
 const currentPartition = null; //Upon patch release, partitioning occurs. Null = current patch ONLY. Number = specific previous partition
+const currentExpansion = 4;
 let currentTierData;
 
 // Core fflogs call to be made by any of the routes
@@ -35,11 +42,43 @@ async function makeRequest(url, params = {}) {
     });
 }
 
+async function makev2Request(query) {
+  return v2Request({
+    method: 'get',
+    data: { query }
+  })
+    .then(res => res.data.data )
+    .catch((err) => {
+      // For now, any errored request will just return an empty object.
+      console.log(`BaseReq err: ${err}; for request (${url})`);
+      return {};
+    });
+
+}
+
 // Get base information for zones (i.e. boss names and encounter numbers)
 async function tierLookup(id) {
-  const results = await makeRequest('zones');
+  // const results = await makeRequest('zones');
 
-  const tierFilter = results.filter(tier => tier.id == id);
+  const results = await makev2Request(`
+    query {
+      worldData { zones (expansion_id: ${currentExpansion} ) {
+        id, 
+        name, 
+        encounters {
+          id, name
+        },
+        partitions  {
+          id, name, compactName, default
+        }
+      } }
+    }`
+  )
+
+
+  const tierFilter = results.worldData.zones.filter(zone => zone.id == id);
+
+  console.log(tierFilter);
 
   if (tierFilter.length) {
     return new Tier(tierFilter[0]);
