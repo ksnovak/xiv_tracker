@@ -56,32 +56,29 @@ async function makev2Request(query) {
 
 }
 
-// Get base information for zones (i.e. boss names and encounter numbers)
+// Get base information for the specified tier (i.e. boss names and encounter numbers)
 async function tierLookup(id) {
-  // const results = await makeRequest('zones');
-
   const results = await makev2Request(`
     query {
-      worldData { zones (expansion_id: ${currentExpansion} ) {
+      worldData { zone (id: ${id} ) {
         id, 
         name, 
         encounters {
           id, name
         },
         partitions  {
-          id, name, compactName, default
+          id, name, default
         }
       } }
     }`
   )
 
+  const tierData = results.worldData.zone;
 
-  const tierFilter = results.worldData.zones.filter(zone => zone.id == id);
+  console.log(tierData);
 
-  console.log(tierFilter);
-
-  if (tierFilter.length) {
-    return new Tier(tierFilter[0]);
+  if (tierData) {
+    return new Tier(tierData);
   }
 
   return {};
