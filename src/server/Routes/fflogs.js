@@ -84,25 +84,11 @@ async function tierLookup(id) {
 
 // Look up a specified character
 async function characterLookup(name, server, region, partition) {
-  // const char = await makeRequest(
-  //   `rankings/character/${name}/${server}/${region}`,
-  //   { partition }
-  // );
+  const char = await makeRequest(
+    `rankings/character/${name}/${server}/${region}`,
+    { partition }
+  );
 
-  const char = await makev2Request(`
-    query {
-      characterData { 
-        character(name: "${name}", serverSlug: "${server}", serverRegion: "${region}") {
-          id, name, zoneRankings
-        } 
-      }
-    }`
-  )
-
-  const parseData = char.characterData.character.zoneRankings.allStars
-
-
-  console.log(parseData);
   return new FflogsCharacter(char);
 }
 
