@@ -6,8 +6,8 @@ export default class ServerSelect extends Component {
   }
 
   render() {
-    const { playerNum, id, server, handleServerChange, isDisabled } = this.props;
-    const serverList = [
+    const { playerNum, id, server, serverList, handleServerChange, isDisabled } = this.props;
+    const placeholderServers = [
       'Balmung',
       'Brynhildr',
       'Coeurl',
@@ -18,7 +18,7 @@ export default class ServerSelect extends Component {
       'Zalera'
     ];
 
-    const options = serverList.map(serverOption => (
+    const options = (serverList.length? serverList : placeholderServers).map(serverOption => (
       <option value={serverOption.toLowerCase()} key={serverOption}>
         {serverOption}
       </option>

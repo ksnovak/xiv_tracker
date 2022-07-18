@@ -13,6 +13,8 @@ export default class App extends Component {
       names: new Array(8),
       parses: [],
       tier: [],
+      regions: [],
+      preferredRegion: 'NA',
       selected: undefined
     };
 
@@ -126,12 +128,17 @@ export default class App extends Component {
 
 
   // Get the names of the fights and their respective IDs
-  getTierInfo() {
-    console.log('Calling getTierInfo!')
+  getConfigInfo() {
+    console.log('Calling getConfigInfo!')
     axios
-      .get(`/api/fflogs/tiers`)
+      .get(`/api/fflogs/config`)
       .then(results => {
-        this.setState({ tier: results ? results.data : null })
+
+        if (results && results.data) {
+          const {tier, regions} = results.data;
+
+          this.setState({tier, regions});
+        }
       })
   }
 
@@ -159,7 +166,7 @@ export default class App extends Component {
     const names = this.parseQueryString(qs['name[]']);
 
 
-    this.getTierInfo();
+    this.getConfigInfo();
 
     //Set the state based on querystring values as appropriate
     this.setState(
@@ -174,7 +181,20 @@ export default class App extends Component {
   }
 
   render() {
-    const { names, parses, tier, selected } = this.state;
+    const { names, parses, tier, selected, regions, preferredRegion } = this.state;
+
+    let serverList = [];
+
+    //Obtain a list of servers, filtering by region (NA, EU, etc) if necessary.
+    if (regions.length) {
+        regions.forEach(region => {
+
+          if (!preferredRegion || region.compactName == preferredRegion) {
+            serverList.push(...region.servers)
+          }
+        })
+    }
+
     return (
       <div id="home">
         Welcome to my internet
@@ -183,6 +203,7 @@ export default class App extends Component {
           handleSearchChange={this.handleSearchChange}
           handleSubmit={this.handleSubmit}
           names={names}
+          servers={serverList}
         />
         <ResultsTable names={names} tier={tier} handleSelectChange={this.handleSelectChange} />
 

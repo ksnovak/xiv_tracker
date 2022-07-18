@@ -9,7 +9,7 @@ export default class BatchLookup extends Component {
   }
 
   render() {
-    const { handleSubmit, handleSearchChange, names } = this.props;
+    const { handleSubmit, handleSearchChange, names, servers } = this.props;
     const searchFields = [];
 
     for (let i = 0; i < 8; i++) {
@@ -26,6 +26,7 @@ export default class BatchLookup extends Component {
           name={player ? player.name : undefined}
           server={player ? player.server : undefined}
           handleSearchChange={handleSearchChange}
+          servers={servers}
         />
       );
     }

@@ -26,6 +26,7 @@ const currentTier = 44; // 38=Promise, 44=Asphodelos
 const currentPartition = null; //Upon patch release, partitioning occurs. Null = current patch ONLY. Number = specific previous partition
 const currentExpansion = 4;
 let currentTierData;
+let serverData;
 
 // Core fflogs call to be made by any of the routes
 async function makeRequest(url, params = {}) {
@@ -57,10 +58,10 @@ async function makev2Request(query) {
 }
 
 // Get base information for the specified tier (i.e. boss names and encounter numbers)
-async function tierLookup(id) {
+async function configLookup(id) {
   const results = await makev2Request(`
     query {
-      worldData { zone (id: ${id} ) {
+      tierDetails: worldData { zone (id: ${id} ) {
         id, 
         name, 
         encounters {
@@ -70,13 +71,32 @@ async function tierLookup(id) {
           id, name, default
         }
       } }
+
+      serverDetails: worldData {
+        regions {
+          id, compactName, name, servers { data { name } }
+        }
+      }
     }`
   )
 
-  const tierData = results.worldData.zone;
+  const tierData = results.tierDetails.zone;
+  const regionData = results.serverDetails.regions;
 
-  if (tierData) {
-    return new Tier(tierData);
+
+  if (tierData || regionData) {
+
+    return {
+      tier: new Tier(tierData),
+
+      regions: regionData.map(({compactName, name, servers}) => {
+        return {
+          compactName,
+          name, 
+          servers: servers.data.map(server => server.name)
+        }
+      })
+    }
   }
 
   return {};
@@ -113,13 +133,13 @@ router.get('/', async (req, res) => {
   res.send('fflogs home');
 });
 
-router.get('/tiers', async (req, res) => {
+router.get('/config', async (req, res) => {
   const { tier = currentTier } = req.query;
   let placeholderData;
 
   // If we either have no data at all, or are looking for custom data, then do a lookup.
   if (!currentTierData || tier != currentTier) {
-    placeholderData = await tierLookup(tier);
+    placeholderData = await configLookup(tier);
 
     // If the data retrieved is for the current tier, save it for later
     if (tier == currentTier) {

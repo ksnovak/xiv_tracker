@@ -7,7 +7,7 @@ export default class PlayerSearch extends Component {
   componentDidMount() { }
 
   render() {
-    const { playerNum, name, server, handleSearchChange, isDisabled } = this.props;
+    const { playerNum, name, server, handleSearchChange, isDisabled, servers } = this.props;
 
     return (
       <div>
@@ -31,6 +31,7 @@ export default class PlayerSearch extends Component {
           isDisabled={isDisabled}
           handleServerChange={handleSearchChange}
           playerNum={playerNum}
+          serverList={servers}
         />
       </div>
     );
