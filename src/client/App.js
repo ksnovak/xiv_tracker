@@ -205,7 +205,7 @@ export default class App extends Component {
           names={names}
           servers={serverList}
         />
-        <ResultsTable names={names} tier={tier} handleSelectChange={this.handleSelectChange} />
+        <ResultsTable names={names} tier={tier} handleSelectChange={this.handleSelectChange} region={preferredRegion} />
 
         {(typeof selected !== "undefined" && names.length) ? <IndividualTable player={names[selected]} tier={tier} /> : ''}
 

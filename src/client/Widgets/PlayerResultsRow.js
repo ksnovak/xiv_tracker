@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './PlayerResultsRow.css';
 import JobSelect, { jobsAndRoles } from './JobSelect';
 
+const fflogsBaseURL = 'https://www.fflogs.com/character';
+
 function buildParseCell(parse) {
   if (parse.length) {
     const [job, percentile] = parse;
@@ -51,9 +53,10 @@ function findBestParse(data, desiredJob) {
 }
 
 export default function PlayerResultsRow(props) {
-  const { player, encounters, index, handleSelectChange } = props;
+  const { player, encounters, index, handleSelectChange, region } = props;
   const [selectedJob, selectJob] = useState('Any');
 
+  console.log(player);
 
   if (!player || !player.parses) {
     return null;
@@ -68,7 +71,7 @@ export default function PlayerResultsRow(props) {
 
   return (
     <tr key={player.name}>
-      <td>{player.name}</td>
+      <td>{player.name} - <a target="_blank" href={`${fflogsBaseURL}/${region}/${player.server}/${player.name}`}>fflogs</a></td>
       <td>
         <JobSelect selectedJob={selectedJob} selectJob={selectJob} />
       </td>
