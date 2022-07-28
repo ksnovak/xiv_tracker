@@ -20,8 +20,6 @@ function buildParseCell(parse) {
 // eslint-disable-next-line class-methods-use-this
 function findBestParse(data, desiredJob) {
   // If no parse for this fight exists, return early
-
-
   if (!data) {
     return;
   }
@@ -55,8 +53,6 @@ function findBestParse(data, desiredJob) {
 export default function PlayerResultsRow(props) {
   const { player, encounters, index, handleSelectChange, region } = props;
   const [selectedJob, selectJob] = useState('Any');
-
-  console.log(player);
 
   if (!player || !player.parses) {
     return null;
